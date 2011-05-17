@@ -20,7 +20,7 @@ namespace loc {
             }
 
             Console.WriteLine("Path: " + path);
-            Console.WriteLine("Extensions " + string.Join(" ", extensions));
+            Console.WriteLine("Extensions: " + string.Join(", ", extensions));
 
             var loc = 0;
             var fileCount = 0;
@@ -38,14 +38,16 @@ namespace loc {
             Console.WriteLine("Total files: " + fileCount);
             Console.WriteLine("Total lines of code: " + loc);
             Console.WriteLine("Average lines of code / file: " + Math.Round((decimal)loc / fileCount, 2));
-            Console.ReadLine();
         }
 
         static int CountLoc(string path) {
             if (!File.Exists(path))
                 return 0;
 
-            return File.ReadAllLines(path, Encoding.UTF8).Count();
+            // Dont count empty lines
+            return File.ReadAllLines(path, Encoding.UTF8)
+                       .Where(x => x.Trim().Length > 0)
+                       .Count();
         }
 
         static void PrintUsageAndExit() {
